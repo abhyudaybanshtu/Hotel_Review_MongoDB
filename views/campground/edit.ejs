@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+    <title>Au Register Forms by Colorlib</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+
+    <link href="/css/camp_add.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+
+    <div class="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins" >
+        <div class="wrapper wrapper--w780">
+            <div class="card card-3">
+                <div class="card-heading"></div>
+                <div class="card-body">
+                    <h2 class="title">Edit Campground</h2>
+                    <form action="/campground/<%=campground._id%>?_method=PUT" method="POST" class="needs-validation"  enctype="multipart/form-data" novalidate>
+                        <div class="input-group mt-3">
+                            <input class="input--style-3 form-control" type="text" placeholder="Title" name="campground[title]" value="<%= campground.title  %>" required>
+                        </div>
+                    
+                        <div class="input-group mt-3">
+                            <input class="input--style-3 form-control" type="text" placeholder="Price" name="campground[price]" value="<%= campground.price  %>" required>
+                        </div>
+                    
+                        <div class="input-group mt-3">
+                            <input class="input--style-3 form-control" type="text" placeholder="Location" name="campground[location]" value="<%= campground.location  %>" required>
+                        </div>
+                    
+                        <div class="input-group mt-3">
+                            <textarea class="input--style-3 form-control" placeholder="Description" name="campground[description]" required><%= campground.description %></textarea>
+                        </div>
+                        <div class="input-group" >
+                            <input class="input--style-3 form-control-file" style="color: white;" type="file" name="images" multiple  >
+                        </div>
+                    
+                        <div class="p-t-10 mt-3">
+                            <button class="btn btn--pill btn--green" type="submit">Submit</button>
+                        </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <br>
+                    <br>
+                    <div style=" display: flex; justify-content: space-around; flex-wrap: wrap;">
+                    <% campground.images.forEach((img,i)=>{%>
+                        <div>
+                        <img src="<%= img.url%>"  style="height:300px; border: solid rgb(255, 255, 255) 5px; box-shadow: 0px 0px 5px black;" alt="" onclick="image('image-<%=i%>')">
+                         <input type="checkbox" id="image-<%=i%>" name="DeleteImage[]" value="<%=img.name%>">                        
+                    </div>
+                   <% }) %>
+                </form>
+                </div>
+            
+    </div>
+
+    <script>
+        function image(x){
+            
+            if(document.getElementById(`${x}`).checked ===false){
+                document.getElementById(`${x}`).checked =true
+            }
+            else{
+                document.getElementById(`${x}`).checked =false
+            }
+            
+        }
+        (function () {
+        'use strict'
+      
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+      
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+          .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+      
+              form.classList.add('was-validated')
+            }, false)
+          })
+      })()
+      </script>
+
+</body>
+</html>
+   

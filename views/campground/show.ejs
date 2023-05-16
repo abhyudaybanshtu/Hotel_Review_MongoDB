@@ -1,0 +1,171 @@
+<%layout('./layouts/boilerplate')%>
+<style>
+    
+  .rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  height: 40px;
+}
+
+.rating>input {
+  display: none;
+}
+
+.rating>label {
+  position: relative;
+  width: 1em;
+  font-size: 30px;
+  font-weight: 300;
+  color: #FFD600;
+  cursor: pointer;
+
+}
+.checked {
+color: orange;
+}
+.rating>label::before {
+  content: "\2605";
+  position: absolute;
+  opacity: 0;
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+  opacity: 1 !important;
+}
+
+.rating>input:checked~label:before {
+  opacity: 1;
+}
+
+.rating:hover>input:checked~label:before {
+  opacity: 0.4;
+}
+</style>
+<body>
+  <section class="py-5">
+      <div class="container px-4 px-lg-5 my-5">
+          <div class="row gx-4 gx-lg-5 align-items-center">
+
+              <div class="col-md-6">
+
+                  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                      <div class="carousel-inner">
+                        <%= count=0  %>
+                        <% for(let x of campground.images) {
+                          count+=1 %>
+                        <div class =" <%= (count===1)? "carousel-item active" : "carousel-item"%>" >
+                          <img class="card-img-top mb-5 mb-md-0" src="<%= x.url %>" alt="First slide">
+                        </div>
+                        <% } %>
+                        
+                      </div>
+                      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  
+                      </a>
+                      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        
+                      </a>
+                    </div>
+
+              </div>
+              <div class="col-md-6">
+                  <div class="small mb-1"><%=campground.author.username %></div>
+                  <h1 class="display-5 fw-bolder"><%= campground.title %></h1>
+                  <h3 class="display-9 fw-bold"><%= campground.location %></h3>
+                  <div class="fs-5 mb-3">
+                      <span><%=campground.price%></span>
+                  </div>
+                  <p class="lead"><%=campground.description%></p>
+                  <% if(currentUser && currentUser.username===campground.author.username){%>
+                  <div class="d-flex">
+                    <a href="/campground/<%=campground._id%>/edit" style="margin-right: 10px;">
+                      <button class="btn btn-outline-dark flex-shrink-0 mr-2" type="button">
+                          Update
+                      </button>
+                    </a>
+                    <form action="/campground/<%=campground._id%>?_method=DELETE" method="POST" >
+                      <button class="btn btn-dark"  type="submit">
+                          Delete
+                      </button>
+                    </form>
+                  </div>
+                  <% } %>
+
+<% if(currentUser){ %>
+
+                  <div class="card bg-secondary mt-3" style="width: 500px;">
+                      <div class="card-body bg-dark" >
+
+                        <form action="/campground/<%= campground._id  %>/review" method="POST" class="needs-validation" novalidate>
+                          <div class="form-group green-border-focus text-light">
+                            <textarea class="form-control" id="exampleFormControlTextarea5" placeholder="Review" rows="3" name="body" required></textarea>
+                            <div class="valid-feedback">
+                              Looks good!
+                            </div>
+                          </div>
+                          <div class="rate text-white ">
+                
+                            <div class="rating" > 
+                              <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> 
+                              <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                               <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                               <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                            </div>
+                          <div style="text-align: center;">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                          </div>
+                          </div>
+                      </form>
+
+                      </div>
+                    </div>
+                    
+<% } %>
+              </div>
+          </div>
+      </div>
+  </section>
+  <section>
+
+
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-10 col-xl-8 text-center">
+          <h3 class="mb-4">Reviews</h3>
+          <p class="mb-4 pb-2 mb-md-5 pb-md-0">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, error amet
+            numquam iure provident voluptate esse quasi, veritatis totam voluptas nostrum
+            quisquam eum porro a pariatur veniam.
+          </p>
+        </div>
+      </div>
+    
+      <div class="row text-center">
+
+        <% for(let x of campground.reviews){%>
+        <div class="col-md-4 mb-0" style="margin-top: 60px;">
+          <div class="d-flex justify-content-center mb-4">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(9).webp"
+              class="rounded-circle shadow-1-strong" width="150" height="150" />
+          </div>
+          <h5 class="mb-3"><%= x.author.username %></h5>
+          <h6 class="text-primary mb-3"><%= x.author.username %></h6>
+          <p class="px-xl-3">
+            <%= x.body  %>
+          </p>
+          <ul class="list-unstyled d-flex justify-content-center mb-0">
+              <% for(let m=0;m < x.rating; m++){ %>
+            <li>
+              <span class="fa fa-star checked"></span>
+            </li>
+            <% } %>
+          
+          </ul>
+        </div>
+        <% } %>
+      </div>
+    </section>
